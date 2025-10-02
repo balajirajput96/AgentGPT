@@ -81,7 +81,12 @@ Happy hacking! :tada:
 
 ## 🚢 Deployment
 
-Ready to deploy AgentGPT to production? Check out our comprehensive [Deployment Guide](./docs/DEPLOYMENT.md) for detailed instructions on:
+Ready to deploy AgentGPT to production?
+
+- 📖 **Quick Start**: [DEPLOYMENT_QUICKSTART.md](./DEPLOYMENT_QUICKSTART.md)
+- 📚 **Full Guide**: [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
+
+Our comprehensive guides cover:
 
 - 🐳 Docker-based deployment with GitHub Container Registry
 - 🌐 Cloud platform deployment (Railway, Render, Vercel)
