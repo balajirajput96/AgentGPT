@@ -6,6 +6,7 @@
 </p>
 <p align="center">
     <img alt="Node version" src="https://img.shields.io/static/v1?label=node&message=%20%3E=18&logo=node.js&color=2334D058" />
+    <a href="https://github.com/balajirajput96/AgentGPT/actions/workflows/deploy.yml"><img src="https://github.com/balajirajput96/AgentGPT/actions/workflows/deploy.yml/badge.svg" alt="Deployment Status"></a>
       <a href="https://github.com/reworkd/AgentGPT/blob/master/README.md"><img src="https://img.shields.io/badge/lang-English-blue.svg" alt="English"></a>
   <a href="https://github.com/reworkd/AgentGPT/blob/master/docs/README.zh-HANS.md"><img src="https://img.shields.io/badge/lang-简体中文-red.svg" alt="简体中文"></a>
   <a href="https://github.com/reworkd/AgentGPT/blob/master/docs/README.hu-Cs4K1Sr4C.md"><img src="https://img.shields.io/badge/lang-Hungarian-red.svg" alt="Hungarian"></a>
@@ -90,11 +91,12 @@ Ready to deploy AgentGPT to production? Check out our comprehensive [Deployment 
 
 **Quick Deploy:**
 ```bash
-# Set up production environment
+# Use the automated deployment script
+./deploy.sh
+
+# Or manually:
 cp .env.prod.example .env.prod
 # Edit .env.prod with your production values
-
-# Deploy with Docker Compose
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
