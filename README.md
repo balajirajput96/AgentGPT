@@ -78,6 +78,27 @@ Before you get started, please make sure you have the following installed:
 
 Happy hacking! :tada:
 
+## 🚢 Deployment
+
+Ready to deploy AgentGPT to production? Check out our comprehensive [Deployment Guide](./docs/DEPLOYMENT.md) for detailed instructions on:
+
+- 🐳 Docker-based deployment with GitHub Container Registry
+- 🌐 Cloud platform deployment (Railway, Render, Vercel)
+- 🔒 Security best practices and SSL setup
+- 📊 Monitoring and troubleshooting
+- 💾 Database backup and restore
+
+**Quick Deploy:**
+```bash
+# Set up production environment
+cp .env.prod.example .env.prod
+# Edit .env.prod with your production values
+
+# Deploy with Docker Compose
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+For automatic deployment on merge to `main`, the repository includes a GitHub Actions workflow that builds and pushes Docker images to GitHub Container Registry.
 
 ## 🚀 Tech Stack
 
