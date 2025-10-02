@@ -15,6 +15,21 @@ This guide explains how to deploy AgentGPT to production.
   - SERP API (optional)
   - Replicate API (optional)
 
+## Quick Start
+
+For a guided deployment experience, use the automated deployment script:
+
+```bash
+./deploy.sh
+```
+
+This script will:
+- Check if Docker is installed
+- Create `.env.prod` from template if it doesn't exist
+- Guide you through pre-built or local build deployment
+- Start all services
+- Show service status and access URLs
+
 ## Deployment Options
 
 ### Option 1: GitHub Container Registry (Recommended)
