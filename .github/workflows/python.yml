@@ -6,6 +6,10 @@ on:
       - 'platform/**'
       - '.github/workflows/python.yml'
 
+concurrency:
+  group: platform-checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   PYTHON_VERSION: "3.11"
 
