@@ -50,7 +50,7 @@ jobs:
         working-directory: platform
     services:
       reworkd_platform-db:
-        image: bitnami/mysql:8.0.30
+        image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: "reworkd_platform"
           MYSQL_ROOT_USER: "reworkd_platform"
