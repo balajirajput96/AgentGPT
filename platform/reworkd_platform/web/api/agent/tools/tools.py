@@ -31,6 +31,7 @@ def get_external_tools() -> List[Type[Tool]]:
         Image,
         Code,
         SID,
+        Conclude,
     ]
 
 

@@ -28,6 +28,7 @@ loguru = "^0.7.2"
 aiokafka = "^0.8.1"
 requests = "^2.32.4"
 langchain = "^0.2.5"
+langchain-community = "^0.2.5"
 openai = "^0.28.0"
 wikipedia = "^1.4.0"
 replicate = "^0.8.4"
@@ -87,6 +88,7 @@ exclude = "tests"
 [tool.pytest.ini_options]
 filterwarnings = [
     "error",
+    "ignore::PendingDeprecationWarning",
     "ignore::DeprecationWarning",
     "ignore:.*unclosed.*:ResourceWarning",
     "ignore::ImportWarning",
