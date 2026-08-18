@@ -126,7 +126,6 @@ class SID(Tool):
 
         return summarize_sid(self.model, self.language, goal, task, snippets)
 
-
     async def call(
         self,
         goal: str,
@@ -137,7 +136,9 @@ class SID(Tool):
         *args: Any,
         **kwargs: Any,
     ) -> FastAPIStreamingResponse:
-         # fall back to search if no results are found
-        return await self._run_sid(goal, task, input_str, user, oauth_crud) or await Search(self.model, self.language).call(
-        goal, task, input_str, user, oauth_crud
-    )
+        # fall back to search if no results are found
+        return await self._run_sid(
+            goal, task, input_str, user, oauth_crud
+        ) or await Search(self.model, self.language).call(
+            goal, task, input_str, user, oauth_crud
+        )
