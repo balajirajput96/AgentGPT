@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional, Tuple, Type, Union
 
-from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
+from langchain_community.chat_models import AzureChatOpenAI, ChatOpenAI
 from pydantic import Field
 
 from reworkd_platform.schemas.agent import LLM_Model, ModelSettings
@@ -8,7 +8,7 @@ from reworkd_platform.schemas.user import UserBase
 from reworkd_platform.settings import Settings
 
 
-class WrappedChatOpenAI(ChatOpenAI):
+class WrappedChatOpenAI(ChatOpenAI):  # type: ignore[misc, valid-type]
     client: Any = Field(
         default=None,
         description="Meta private value but mypy will complain its missing",
@@ -17,7 +17,7 @@ class WrappedChatOpenAI(ChatOpenAI):
     model_name: LLM_Model = Field(alias="model")
 
 
-class WrappedAzureChatOpenAI(AzureChatOpenAI, WrappedChatOpenAI):
+class WrappedAzureChatOpenAI(AzureChatOpenAI, WrappedChatOpenAI):  # type: ignore[misc, valid-type]
     openai_api_base: str
     openai_api_version: str
     deployment_name: str

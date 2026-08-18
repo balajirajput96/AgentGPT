@@ -3,8 +3,8 @@ from __future__ import annotations
 import uuid
 from typing import Any, Dict, List
 
-from langchain.embeddings import OpenAIEmbeddings
 from langchain.embeddings.base import Embeddings
+from langchain_community.embeddings import OpenAIEmbeddings
 from pinecone import Index  # import doesnt work on plane wifi
 from pydantic import BaseModel
 
@@ -38,7 +38,7 @@ class PineconeMemory(AgentMemory):
 
     @timed_function(level="DEBUG")
     def __enter__(self) -> AgentMemory:
-        self.embeddings: Embeddings = OpenAIEmbeddings(
+        self.embeddings: Embeddings = OpenAIEmbeddings(  # type: ignore[call-arg]
             client=None,  # Meta private value but mypy will complain its missing
             openai_api_key=settings.openai_api_key,
         )
