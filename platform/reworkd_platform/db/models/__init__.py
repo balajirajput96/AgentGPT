@@ -1,5 +1,4 @@
 """reworkd_platform models."""
-
 import pkgutil
 from pathlib import Path
 
