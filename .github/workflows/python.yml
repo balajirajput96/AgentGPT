@@ -6,7 +6,6 @@ on:
     paths:
       - 'platform/**'
       - '.github/workflows/python.yml'
-
 concurrency:
   group: platform-checks-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
