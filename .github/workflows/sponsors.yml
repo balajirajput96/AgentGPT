@@ -4,7 +4,28 @@ on:
   schedule:
     - cron: 0 0 * * *
 jobs:
+  preflight:
+    name: Verify sponsor workflow token
+    runs-on: ubuntu-latest
+    outputs:
+      sponsors_ready: ${{ steps.verify.outputs.sponsors_ready }}
+    env:
+      SPONSOR_WORKFLOW_PAT: ${{ secrets.SPONSOR_WORKFLOW_PAT }}
+    steps:
+      - id: verify
+        shell: bash
+        run: |
+          if [ -n "$SPONSOR_WORKFLOW_PAT" ]; then
+            echo 'sponsors_ready=true' >> "$GITHUB_OUTPUT"
+            echo 'Sponsor workflow token is available.'
+          else
+            echo 'sponsors_ready=false' >> "$GITHUB_OUTPUT"
+            echo 'Sponsor workflow skipped because SPONSOR_WORKFLOW_PAT is unavailable.'
+          fi
+
   deploy:
+    needs: preflight
+    if: ${{ needs.preflight.outputs.sponsors_ready == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
