@@ -74,8 +74,29 @@ jobs:
           CYCLE: ${{ steps.state.outputs.cycle }}
           RESULT: ${{ steps.validation.outcome || 'skipped' }}
         run: |
+          OUTCOME="${RESULT}"
+          if [ "$CYCLE" -gt 2400 ]; then OUTCOME="cycle-limit-reached"; fi
           echo "## Hourly maintenance" >> "$GITHUB_STEP_SUMMARY"
           echo "- Cycle count: $CYCLE" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Validation outcome: ${RESULT}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Validation outcome: ${OUTCOME}" >> "$GITHUB_STEP_SUMMARY"
           echo "- State source: GitHub Actions workflow-run history" >> "$GITHUB_STEP_SUMMARY"
           echo "- Safety: no pull-request merge, source modification, credential storage, or issue creation" >> "$GITHUB_STEP_SUMMARY"
+          cat > maintenance-remediation-draft.md <<EOF
+          # Maintenance Remediation Draft
+
+          Cycle: ${CYCLE}
+          Validation outcome: ${OUTCOME}
+
+          ## Proposed next action
+
+          $(if [ "$OUTCOME" = "success" ]; then echo "No source change is proposed. Continue scheduled validation."; else echo "Review the associated GitHub Actions job logs and prepare a separate pull request only after reproducing the failure."; fi)
+
+          This draft contains no logs, credentials, source edits, pull-request merge action, or automatic remediation.
+          EOF
+      - name: Upload remediation draft
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: maintenance-remediation-draft
+          path: maintenance-remediation-draft.md
+          if-no-files-found: error
