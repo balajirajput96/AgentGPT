@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:19-alpine
+FROM node:19-alpine AS prod
 
 ARG NODE_ENV
 
