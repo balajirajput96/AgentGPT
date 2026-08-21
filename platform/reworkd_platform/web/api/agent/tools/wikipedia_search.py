@@ -1,7 +1,7 @@
 from typing import Any
 
 from lanarky.responses import StreamingResponse
-from langchain import WikipediaAPIWrapper
+from langchain_community.utilities import WikipediaAPIWrapper
 
 from reworkd_platform.web.api.agent.stream_mock import stream_string
 from reworkd_platform.web.api.agent.tools.tool import Tool

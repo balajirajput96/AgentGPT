@@ -1,4 +1,4 @@
-from langchain import PromptTemplate
+from langchain_core.prompts import PromptTemplate
 
 # Create initial tasks using plan and solve prompting
 # https://github.com/AGI-Edgerunners/Plan-and-Solve-Prompting

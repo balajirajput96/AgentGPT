@@ -1,6 +1,6 @@
 from typing import Any, Callable, Dict, TypeVar
 
-from langchain import BasePromptTemplate, LLMChain
+from langchain.chains import LLMChain
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema import BaseOutputParser, OutputParserException
 from openai.error import (
@@ -67,7 +67,7 @@ async def openai_error_handler(
 
 async def call_model_with_handling(
     model: BaseChatModel,
-    prompt: BasePromptTemplate,
+    prompt: Any,
     args: Dict[str, str],
     settings: ModelSettings,
     **kwargs: Any,

@@ -1,7 +1,7 @@
 import itertools
 
 import pytest
-from langchain.chat_models import AzureChatOpenAI, ChatOpenAI
+from langchain_community.chat_models import AzureChatOpenAI, ChatOpenAI
 
 from reworkd_platform.schemas import ModelSettings, UserBase
 from reworkd_platform.settings import Settings
