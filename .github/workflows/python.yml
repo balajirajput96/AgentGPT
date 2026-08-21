@@ -58,11 +58,9 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: "reworkd_platform"
-          MYSQL_ROOT_USER: "reworkd_platform"
           MYSQL_DATABASE: "reworkd_platform"
-          MYSQL_AUTHENTICATION_PLUGIN: "mysql_native_password"
         options: >-
-          --health-cmd="mysqladmin ping -u root"
+          --health-cmd="mysqladmin ping -u root --password=reworkd_platform"
           --health-interval=15s
           --health-timeout=5s
           --health-retries=6
