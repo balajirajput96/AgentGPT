@@ -1,0 +1,103 @@
+name: Hourly Maintenance
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: hourly-maintenance-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      reworkd_platform-db:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: "reworkd_platform"
+          MYSQL_DATABASE: "reworkd_platform"
+          MYSQL_AUTHENTICATION_PLUGIN: "mysql_native_password"
+        options: >-
+          --health-cmd="mysqladmin ping -u root"
+          --health-interval=15s
+          --health-timeout=5s
+          --health-retries=6
+        ports:
+          - 3306:3306
+    defaults:
+      run:
+        working-directory: platform
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read maintenance state
+        id: state
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = "[automation] Hourly maintenance state";
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              per_page: 100,
+            });
+            const issue = issues.find((item) => item.title === title);
+            const previous = issue?.body?.match(/Cycle count:\s*(\d+)/);
+            core.setOutput("cycle", String((previous ? Number(previous[1]) : 0) + 1));
+            core.setOutput("issue-number", issue ? String(issue.number) : "");
+      - uses: actions/setup-python@v5
+        if: ${{ fromJSON(steps.state.outputs.cycle) <= 2400 }}
+        with:
+          python-version: "3.11"
+          cache: poetry
+          cache-dependency-path: platform/poetry.lock
+      - name: Install validation dependencies
+        if: ${{ fromJSON(steps.state.outputs.cycle) <= 2400 }}
+        run: |
+          pipx install poetry
+          poetry install
+      - name: Run bounded platform validation
+        id: validation
+        if: ${{ fromJSON(steps.state.outputs.cycle) <= 2400 }}
+        continue-on-error: true
+        env:
+          REWORKD_PLATFORM_HOST: "0.0.0.0"
+          REWORKD_PLATFORM_DB_HOST: localhost
+          REWORKD_PLATFORM_KAFKA_BOOTSTRAP_SERVERS: '["localhost:9092"]'
+        run: |
+          poetry run black --check .
+          poetry run mypy .
+          poetry run pytest -vv --cov="reworkd_platform" .
+      - name: Record maintenance state
+        if: ${{ always() }}
+        uses: actions/github-script@v7
+        env:
+          CYCLE: ${{ steps.state.outputs.cycle }}
+          ISSUE_NUMBER: ${{ steps.state.outputs.issue-number }}
+          RESULT: ${{ steps.validation.outcome || 'skipped' }}
+        with:
+          script: |
+            const title = "[automation] Hourly maintenance state";
+            const cycle = Number(process.env.CYCLE);
+            const outcome = cycle > 2400 ? "cycle-limit-reached" : process.env.RESULT;
+            const body = [
+              "Automated validation state for the bounded maintenance workflow.",
+              "",
+              `Cycle count: ${cycle}`,
+              `Validation outcome: ${outcome}`,
+              "",
+              "This workflow never merges pull requests, changes source code, or stores credentials.",
+            ].join("\n");
+            const issueNumber = Number(process.env.ISSUE_NUMBER);
+            if (issueNumber) {
+              await github.rest.issues.update({ ...context.repo, issue_number: issueNumber, body });
+            } else {
+              await github.rest.issues.create({ ...context.repo, title, body });
+            }
